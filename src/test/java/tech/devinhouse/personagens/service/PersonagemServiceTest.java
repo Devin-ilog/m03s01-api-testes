@@ -144,4 +144,17 @@ class PersonagemServiceTest {
         assertThrows(RegistroNaoEncontradoException.class, () -> service.excluir(id));
     }
 
+    @Test
+    @DisplayName("Quando existe personagem com o id informando, deve retornar seu nome")
+    void consultarNome() {
+        Long id = 10L;
+        Personagem personagem = new Personagem(id, 12345678901L, "super sapato", LocalDate.now().minusYears(20), "Serie do Sapato");
+        Mockito.when(repo.findById(Mockito.anyLong())).thenReturn(Optional.of(personagem));
+        String nomeRetornado = service.consultarNome(id);
+        assertNotNull(nomeRetornado);
+        assertEquals(personagem.getNome(), nomeRetornado);
+    }
+    
+    //TODO: COMPLEMENTAR COM OUTROS TESTES ...
+
 }
