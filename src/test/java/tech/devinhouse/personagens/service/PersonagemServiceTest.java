@@ -1,5 +1,6 @@
 package tech.devinhouse.personagens.service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -104,6 +105,38 @@ class PersonagemServiceTest {
         assertThrows(RegistroNaoEncontradoException.class, () -> service.consultar(1L));
     }
 
-    //TODO: Continuar com demais testes ...
+    @Test
+    @DisplayName("Quando existe registro com o cpf informado, deve retornar este registro")
+    void consultarPor_registroExistente() {
+        // pre-condicoes
+        Long cpf = 12345678901L;
+        Personagem personagem = new Personagem(10L, cpf, "super sapato", LocalDate.now().minusYears(20), "Serie do Sapato");
+        Mockito.when(repo.findByCpf(Mockito.anyLong())).thenReturn(Optional.of(personagem));
+        // chamada do servico
+        Personagem resultado = service.consultarPor(cpf);
+        // conferindo
+        assertNotNull(resultado);
+        assertEquals(cpf, resultado.getCpf());
+    }
+
+    @Test
+    @DisplayName("Quando nao existe registro com o cpf informando, deve lançar exceção")
+    void consultarPor_naoExistente() {
+        Long cpf = 12345678901L;
+        Mockito.when(repo.findByCpf(Mockito.anyLong())).thenReturn(Optional.empty());
+        assertThrows(RegistroNaoEncontradoException.class, () -> service.consultarPor(cpf));
+    }
+
+    @Test
+    @DisplayName("Quando existe o registro com o id informando, deve ser excluido")
+    void excluir_existente() {
+
+    }
+
+    @Test
+    @DisplayName("Quando nao existe o registro com o id informando, deve lancar exceção")
+    void excluir_naoExistente() {
+
+    }
 
 }
