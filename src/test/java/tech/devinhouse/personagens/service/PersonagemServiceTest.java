@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)  // para usar o Mockito
 class PersonagemServiceTest {
@@ -130,13 +131,17 @@ class PersonagemServiceTest {
     @Test
     @DisplayName("Quando existe o registro com o id informando, deve ser excluido")
     void excluir_existente() {
-
+        Long id = 1L;
+        Mockito.when(repo.findById(Mockito.anyLong())).thenReturn(Optional.of(new Personagem()));
+        assertDoesNotThrow(() -> service.excluir(id));
     }
 
     @Test
     @DisplayName("Quando nao existe o registro com o id informando, deve lancar exceção")
     void excluir_naoExistente() {
-
+        Long id = 1l;
+        Mockito.when(repo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        assertThrows(RegistroNaoEncontradoException.class, () -> service.excluir(id));
     }
 
 }
