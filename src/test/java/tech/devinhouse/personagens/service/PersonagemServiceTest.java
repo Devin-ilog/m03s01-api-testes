@@ -9,12 +9,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import tech.devinhouse.personagens.exception.RegistroExistenteException;
+import tech.devinhouse.personagens.exception.RegistroNaoEncontradoException;
 import tech.devinhouse.personagens.model.Personagem;
 import tech.devinhouse.personagens.repository.PersonagemRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,4 +85,25 @@ class PersonagemServiceTest {
         assertNotNull(personagemInserido.getId());
         assertEquals(personagem.getNome(), personagemInserido.getNome());
     }
+
+    @Test
+    @DisplayName("Quando existe um personagem com o id informado, deve retornar este personagem")
+    void consultarPorId() {
+        Long id = 1L;
+        Personagem personagem = new Personagem(1L, 123456789L, "super sapato", LocalDate.now().minusYears(20), "Serie do Sapato");
+        Mockito.when(repo.findById(Mockito.anyLong())).thenReturn(Optional.of(personagem));
+        Personagem resultado = service.consultar(id);
+        assertNotNull(resultado);
+        assertEquals(id, resultado.getId());
+    }
+
+    @Test
+    @DisplayName("Quando nao existe um personagem com o id informado, deve lançar exceção")
+    void consultarPorId_naoExistente() {
+        Mockito.when(repo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        assertThrows(RegistroNaoEncontradoException.class, () -> service.consultar(1L));
+    }
+
+    //TODO: Continuar com demais testes ...
+
 }
