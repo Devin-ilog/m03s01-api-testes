@@ -13,6 +13,8 @@ import tech.devinhouse.personagens.model.Personagem;
 import tech.devinhouse.personagens.service.PersonagemService;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 @RestController
@@ -76,6 +78,23 @@ public class PersonagensController {
         String nome = service.consultarNome(id);
         var resp = new PersonagemIdadeResponse(nome, idade);
         return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("dados")
+    public ResponseEntity<List<PersonagemResponse>> incluirDefault() {
+        var lista = List.of(
+                new Personagem(null, 12345678901L, "John Snow", LocalDate.of(1707, Month.JANUARY, 1), "Game of Thrones"),
+                new Personagem(null, 22345678902L, "Sansa Stark", LocalDate.of(1705, Month.APRIL, 3), "Game of Thrones"),
+                new Personagem(null, 32345678903L, "Adrian Monk", LocalDate.of(1977, Month.FEBRUARY, 2), "Monk"),
+                new Personagem(null, 42345678904L, "Gandalf", LocalDate.of(1100, Month.JANUARY, 1), "Senhor dos Aneis"),
+                new Personagem(null, 52345678905L, "Frodo Baggins", LocalDate.of(1600, Month.SEPTEMBER, 5), "Senhor dos Aneis"),
+                new Personagem(null, 62345678906L, "Gollum", LocalDate.of(1690, Month.JULY, 10), "Senhor dos Aneis"),
+                new Personagem(null, 72345678907L, "Saruman", LocalDate.of(1090, Month.DECEMBER, 31), "Senhor dos Aneis"),
+                new Personagem(null, 82345678908L, "Aragorn", LocalDate.of(1777, Month.MARCH, 22), "Senhor dos Aneis")
+        );
+        List<Personagem> inseridos = service.inserir(lista);
+        List<PersonagemResponse> resp = inseridos.stream().map(p -> modelMapper.map(p, PersonagemResponse.class)).toList();
+        return ResponseEntity.created(URI.create("")).body(resp);
     }
 
 }

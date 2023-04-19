@@ -19,7 +19,7 @@ public class PersonagemService {
     private PersonagemRepository repo;
 
     public Personagem inserir(Personagem personagem) {
-        var isCPFjaCadastrado = repo.existsPersonagemByCpf(personagem.getCpf());
+        boolean isCPFjaCadastrado = repo.existsPersonagemByCpf(personagem.getCpf());
         if (isCPFjaCadastrado) {
             throw new RegistroExistenteException();
         }

@@ -16,10 +16,10 @@ public interface PersonagemRepository extends JpaRepository<Personagem, Long> {
 
     Optional<Personagem> findByCpf(Long cpf);
 
-    @Query("SELECT p FROM Personagem p WHERE p.dataNascimento > :data") // jpql
-    List<Personagem> consultarPorDataNascimentoPosteriorA(LocalDate data);
+//    @Query("SELECT p FROM Personagem p WHERE p.dataNascimento > :data") // jpql
+//    List<Personagem> consultarPorDataNascimentoPosteriorA(LocalDate data);
 
-    @Query("SELECT p FROM Personagem p WHERE p.nome LIKE :nomeParcial")
-    List<Personagem> consultarPorNomeParcial(String nomeParcial);
+//    @Query("SELECT p FROM Personagem p WHERE p.nome LIKE :nomeParcial")
+//    List<Personagem> consultarPorNomeParcial(String nomeParcial);
 
 }

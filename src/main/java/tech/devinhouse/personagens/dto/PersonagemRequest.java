@@ -20,7 +20,7 @@ public class PersonagemRequest {
     private String nome;
 
     @PastOrPresent(message = "Data deve ser anterior à data atual")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") // Converte a data neste formato
     private LocalDate dataNascimento;
 
     @NotEmpty(message = "Série deve ser informado")
