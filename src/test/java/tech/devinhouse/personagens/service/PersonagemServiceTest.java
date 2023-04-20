@@ -1,6 +1,5 @@
 package tech.devinhouse.personagens.service;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import tech.devinhouse.personagens.exception.RegistroExistenteException;
 import tech.devinhouse.personagens.exception.RegistroNaoEncontradoException;
 import tech.devinhouse.personagens.model.Personagem;
@@ -16,10 +14,10 @@ import tech.devinhouse.personagens.repository.PersonagemRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)  // para usar o Mockito
 class PersonagemServiceTest {
