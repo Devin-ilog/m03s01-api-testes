@@ -33,7 +33,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RegistroNaoEncontradoException.class)
     public ResponseEntity<Object> handleRegistroNaoEncontradoException(RegistroNaoEncontradoException e) {
         Map<String, String> retorno = new HashMap<>();
-        retorno.put("erro", "Registro já cadastrado!");
+        retorno.put("erro", "Registro não encontrado!");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(retorno);
     }
 

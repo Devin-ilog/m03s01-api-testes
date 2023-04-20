@@ -32,7 +32,7 @@ public class PersonagensController {
         Personagem personagem = modelMapper.map(request, Personagem.class);
         personagem = service.inserir(personagem);
         PersonagemResponse resp = modelMapper.map(personagem, PersonagemResponse.class);
-        return ResponseEntity.created(URI.create(resp.getId().toString())).body(resp);
+        return ResponseEntity.created(URI.create(resp.getId().toString())).body(resp);  // 201
     }
 
     @GetMapping
