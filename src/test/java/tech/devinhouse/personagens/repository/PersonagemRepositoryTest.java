@@ -75,14 +75,19 @@ class PersonagemRepositoryTest {
     @Test
     @DisplayName("Quando nao tem registros, deve retornar lista vazia")
     void consultarPorNomeParcial_semRegistros() {
-        var resultado = repo.consultarPorNomeParcial("%AB%");
+        List<Personagem> resultado = repo.consultarPorNomeParcial("%AB%");
         assertTrue(resultado.isEmpty());
     }
 
     @Test
     @DisplayName("Quando nao existem personagens cadastrados que atendem ao critério de nome parcial, deve retornar lista vazia")
     void consultarPorNomeParcial_naoExisteRegistro() {
-
+        var pers1 = new Personagem(null, 111L, "Personagem ABC", LocalDate.of(1700, Month.JANUARY, 1), "serie 1");
+        var pers2 = new Personagem(null, 222L, "Personagem DEF", LocalDate.of(1902, Month.JANUARY, 1), "serie 2");
+        em.persist(pers1);
+        em.persist(pers2);
+        var resultado = repo.consultarPorNomeParcial("%ZZ%");
+        assertTrue(resultado.isEmpty());
     }
 
 }
