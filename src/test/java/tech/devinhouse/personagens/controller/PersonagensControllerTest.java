@@ -1,7 +1,6 @@
 package tech.devinhouse.personagens.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +23,10 @@ import java.time.Month;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -133,6 +132,53 @@ class PersonagensControllerTest {
                 .andExpect(status().isCreated())  // 201
                 .andExpect(jsonPath("$.id", is(notNullValue())))
                 .andExpect(jsonPath("$.id", is(personagem.getId().intValue())));
+    }
+
+    @Test
+    @DisplayName("Quando consulta personagem pelo CPF nao cadastrado, deve retornar erro")
+    void consultarPorCpf_naoCadastrado() throws Exception {
+        Mockito.when(service.consultarPor(Mockito.anyLong())).thenThrow(RegistroNaoEncontradoException.class);
+        mockMvc.perform(get("/api/personagens/cpf/{cpf}", 12345678901L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())  // 404
+                .andExpect(jsonPath("$.erro", is(notNullValue())));
+    }
+
+    @Test
+    @DisplayName("Quando consulta personagem pelo CPF cadastrado, deve retornar registro")
+    void consultarPorCpf_cadastrado() throws Exception {
+        var personagem = new Personagem(1L, 11111111111L, "James Kirk", LocalDate.of(1925, Month.JANUARY, 1), "Star Trek");
+        Mockito.when(service.consultarPor(Mockito.anyLong())).thenReturn(personagem);
+        mockMvc.perform(get("/api/personagens/cpf/{cpf}", personagem.getCpf())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome", is(personagem.getNome())));
+    }
+
+    @Test
+    @DisplayName("Quando consulta idade do personagem, deve seu nome e idade")
+    void consultarIdade() throws Exception {
+        var personagem = new Personagem(1L, 11111111111L, "James Kirk", LocalDate.of(1925, Month.JANUARY, 1), "Star Trek");
+        Mockito.when(service.consultarIdade(Mockito.anyLong())).thenReturn(2023-personagem.getDataNascimento().getYear());
+        Mockito.when(service.consultarNome(Mockito.anyLong())).thenReturn(personagem.getNome());
+        mockMvc.perform(get("/api/personagens/{id}/idade", personagem.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idade", is(notNullValue())))
+                .andExpect(jsonPath("$.nome", is(notNullValue())))
+                .andExpect(jsonPath("$.nome", is(personagem.getNome())));
+
+    }
+
+    @Test
+    @DisplayName("Quando consulta idade do personagem nao cadastrado, deve retornar erro")
+    void consultarIdade_naoCadastrado() throws Exception {
+        Mockito.when(service.consultarIdade(Mockito.anyLong())).thenThrow(RegistroNaoEncontradoException.class);
+        mockMvc.perform(get("/api/personagens/{id}/idade", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.erro", is(notNullValue())));
+
     }
 
 }
