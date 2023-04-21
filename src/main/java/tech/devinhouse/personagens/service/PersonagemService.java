@@ -71,7 +71,7 @@ public class PersonagemService {
 
     public Integer consultarIdade(Long id) {
         Personagem personagem = this.consultar(id);
-        int idade = (int) Duration.between(personagem.getDataNascimento(), LocalDate.now()).toDays();
+        int idade = (int) Duration.between(personagem.getDataNascimento().atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() / 365;
         return idade;
     }
 
