@@ -1,7 +1,10 @@
 package tech.devinhouse.personagens.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/personagens")
+@Slf4j   // instancia um logger para uso na classe
 public class PersonagensController {
 
     @Autowired
@@ -29,6 +33,7 @@ public class PersonagensController {
 
     @PostMapping
     public ResponseEntity inserir(@RequestBody @Valid PersonagemRequest request) {
+        log.info("Request de insercao: {}", request);
         Personagem personagem = modelMapper.map(request, Personagem.class);
         personagem = service.inserir(personagem);
         PersonagemResponse resp = modelMapper.map(personagem, PersonagemResponse.class);
@@ -40,6 +45,7 @@ public class PersonagensController {
         List<Personagem> personagens = service.consultar();
         List<PersonagemResponse> resp = personagens.stream()
                 .map(p -> modelMapper.map(p, PersonagemResponse.class)).toList();
+        log.info("Consulta com {} registros", resp.size());
         return ResponseEntity.ok(resp);
     }
 
@@ -82,6 +88,7 @@ public class PersonagensController {
 
     @PostMapping("dados")
     public ResponseEntity<List<PersonagemResponse>> incluirDefault() {
+        log.info("Executado serviço de carga inicial de registros");
         var lista = List.of(
                 new Personagem(null, 12345678901L, "John Snow", LocalDate.of(1707, Month.JANUARY, 1), "Game of Thrones"),
                 new Personagem(null, 22345678902L, "Sansa Stark", LocalDate.of(1705, Month.APRIL, 3), "Game of Thrones"),

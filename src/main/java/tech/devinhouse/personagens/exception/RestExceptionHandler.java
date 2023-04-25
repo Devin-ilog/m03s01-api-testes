@@ -73,6 +73,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         Map<String, String> retorno = new HashMap<>();
         retorno.put("erro", "Erro no servidor! Contate o administrador do sistema!");
+        log.error("Erro no sistema: {}", ex.getMessage());
         return new ResponseEntity<>(retorno, headers, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

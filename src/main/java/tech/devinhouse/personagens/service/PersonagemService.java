@@ -1,5 +1,6 @@
 package tech.devinhouse.personagens.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.devinhouse.personagens.exception.RegistroExistenteException;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class PersonagemService {
 
     @Autowired
@@ -21,9 +23,11 @@ public class PersonagemService {
     public Personagem inserir(Personagem personagem) {
         boolean isCPFjaCadastrado = repo.existsPersonagemByCpf(personagem.getCpf());
         if (isCPFjaCadastrado) {
+            log.warn("Solicitacao de cadastro de personagem com CPF já existente: {}", personagem.getCpf());
             throw new RegistroExistenteException();
         }
         personagem = repo.save(personagem);
+        log.debug("Criado registro com id {}", personagem.getId());
         return personagem;
     }
 
@@ -34,6 +38,7 @@ public class PersonagemService {
 
     public Personagem consultar(Long id) {
         Optional<Personagem> personagemOpt = repo.findById(id);
+        log.trace("Consultado personagem pelo id {}", id);
         return personagemOpt.orElseThrow(RegistroNaoEncontradoException::new);
     }
 
@@ -51,9 +56,11 @@ public class PersonagemService {
     public Personagem alterar(Personagem alterado) {
         var personagem = repo.findById(alterado.getId())
                 .orElseThrow(RegistroNaoEncontradoException::new);
+        log.debug("Dados originais: {}", personagem);
         personagem.setNome(alterado.getNome());
         personagem.setDataNascimento(alterado.getDataNascimento());
         personagem.setSerie(alterado.getSerie());
+        log.debug("Dados alterados: {}", personagem);
         personagem = repo.save(personagem);
         return personagem;
     }
@@ -61,6 +68,7 @@ public class PersonagemService {
     public void excluir(Long id) {
         var personagem = repo.findById(id)
                 .orElseThrow(RegistroNaoEncontradoException::new);
+        log.debug("Registro excluído: {}", personagem);
         repo.delete(personagem);
     }
 
