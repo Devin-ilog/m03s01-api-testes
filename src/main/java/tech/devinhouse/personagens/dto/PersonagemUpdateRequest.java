@@ -1,5 +1,6 @@
 package tech.devinhouse.personagens.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,7 @@ public class PersonagemUpdateRequest {
     private String nome;
 
     @PastOrPresent(message = "Data deve ser anterior à data atual")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") // Converte a data neste formato
     private LocalDate dataNascimento;
 
     @NotEmpty(message = "Série deve ser informado")
