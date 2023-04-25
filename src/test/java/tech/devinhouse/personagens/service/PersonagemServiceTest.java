@@ -69,7 +69,7 @@ class PersonagemServiceTest {
     }
 
     @Test
-    @DisplayName("Quando tenta inserir registro com cpf já existente, deve lançar excecao")
+    @DisplayName("Quando tenta inserir registro com cpf não existente, deve inserir registro")
     void inserir_cpfNaoExistente() {
         // given  (pre-condicoes)
         Personagem personagem = new Personagem(null, 123456789L, "super sapato", LocalDate.now().minusYears(20), "Serie do Sapato");
