@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>personagem-api</contextName>
+
+    <!--Appender da saída no console -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{}): %msg%n%throwable</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- Arquivo de log em texto plano -->
+    <appender name="Arquivo-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>./logs/personagem-api.log</File>
+        <encoder>
+            <charset>ISO-8859-1</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1} : %m%n%ex</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>./logs/personagem-api-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Logger da aplicação -->
+    <logger name="tech.devinhouse.personagens" level="debug" additivity="false">
+        <appender-ref ref="Console" />
+        <appender-ref ref="Arquivo-log" />
+    </logger>
+
+    <!-- Logger root -->
+    <root level="error">
+        <appender-ref ref="Console" />
+        <appender-ref ref="Arquivo-log" />
+    </root>
+</configuration>
