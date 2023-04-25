@@ -3,8 +3,6 @@ package tech.devinhouse.personagens.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +65,7 @@ public class PersonagensController {
     public ResponseEntity<PersonagemResponse> alterar(@PathVariable("id") Long id,
                                                       @RequestBody @Valid PersonagemUpdateRequest request) {
         Personagem personagem = modelMapper.map(request, Personagem.class);
+        personagem.setId(id);
         personagem = service.alterar(personagem);
         PersonagemResponse resp = modelMapper.map(personagem, PersonagemResponse.class);
         return ResponseEntity.ok(resp);
