@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/personagens")
 @Slf4j   // instancia um logger para uso na classe
+@CrossOrigin
 public class PersonagensController {
 
     @Autowired
